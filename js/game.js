@@ -15,6 +15,7 @@ let computerPoints = 0;
 // HTML References
 const btnGet = document.getElementById('btnGet');
 const smallPoints = document.querySelectorAll('small');
+const divPlayerCards = document.getElementById('player-cards');
 
 // Create and shuffle a deck of cards.
 const createDeck = () => {
@@ -61,6 +62,17 @@ const getCardValue = (card) => {
 btnGet.addEventListener('click', () => {
   const card = getCard();
   playerPoints += getCardValue(card);
-
   smallPoints[0].innerText = playerPoints;
+
+  const imgCard = document.createElement('img');
+  imgCard.src = `assets/${card}.png`;
+  imgCard.classList.add('blackjack-card');
+  divPlayerCards.append(imgCard);
+
+  if (playerPoints > 21) {
+    console.warn('lost');
+    btnGet.disabled = true;
+  } else if (playerPoints === 21) {
+    console.warn('21, :)');
+  }
 });
