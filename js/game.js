@@ -9,6 +9,7 @@ let deck = [];
 const types = ['C', 'D', 'H', 'S'];
 const specials = ['A', 'J', 'Q', 'K'];
 
+// Create and shuffle a deck of cards.
 const createDeck = () => {
   for (const type of types) {
     for (let i = 2; i <= 10; i++) {
@@ -27,3 +28,13 @@ const createDeck = () => {
 }
 
 createDeck();
+
+// Retrieves a card from the deck.
+const getCard = () => {
+  if (deck.length === 0) {
+    throw new Error('There are no cards in the deck')
+  }
+
+  const card = deck.pop();
+  return card;
+}
