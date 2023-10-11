@@ -9,6 +9,13 @@ let deck = [];
 const types = ['C', 'D', 'H', 'S'];
 const specials = ['A', 'J', 'Q', 'K'];
 
+let playerPoints = 0;
+let computerPoints = 0;
+
+// HTML References
+const btnGet = document.getElementById('btnGet');
+const smallPoints = document.querySelectorAll('small');
+
 // Create and shuffle a deck of cards.
 const createDeck = () => {
   for (const type of types) {
@@ -22,8 +29,6 @@ const createDeck = () => {
   }
 
   deck = _.shuffle(deck);
-  console.log(deck);
-
   return deck;
 }
 
@@ -40,7 +45,7 @@ const getCard = () => {
 }
 
 // Calculate the numerical value of a card in a deck.
-const cardValue = (card) => {
+const getCardValue = (card) => {
   const value = card.substring(0, card.length - 1);
   let points = 0;
 
@@ -52,3 +57,10 @@ const cardValue = (card) => {
 
   return points;
 }
+
+btnGet.addEventListener('click', () => {
+  const card = getCard();
+  playerPoints += getCardValue(card);
+
+  smallPoints[0].innerText = playerPoints;
+});
