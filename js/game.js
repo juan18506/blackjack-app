@@ -15,12 +15,13 @@ let computerPoints = 0;
 // HTML References
 const btnGet = document.getElementById('btnGet');
 const btnStop = document.getElementById('btnStop');
+const btnNew = document.getElementById('btnNew');
 const smallPoints = document.querySelectorAll('small');
 const divPlayerCards = document.getElementById('player-cards');
 const divComputerCards = document.getElementById('computer-cards');
 
 // Create and shuffle a deck of cards.
-const createDeck = () => {
+const createDeck = () => {  
   for (const type of types) {
     for (let i = 2; i <= 10; i++) {
       deck.push(i + type);
@@ -78,6 +79,16 @@ const computerTurn = (minPoints) => {
     }
     
   } while (computerPoints < minPoints);
+
+  setTimeout(() => {
+    if (computerPoints === minPoints) {
+      alert('no one wins');
+    } else if (minPoints > 21 || (computerPoints <= 21 && computerPoints > minPoints)) {
+      alert('Computer wins');
+    } else if (computerPoints > 21 || (minPoints <= 21 && minPoints > computerPoints)) {
+      alert('Player wins')
+    }
+  }, 50);
 }
 
 btnGet.addEventListener('click', () => {
@@ -95,6 +106,7 @@ btnGet.addEventListener('click', () => {
     btnStop.disabled = true;
     computerTurn(playerPoints);
   } else if (playerPoints === 21) {
+    btnGet.disabled = true;
     btnStop.disabled = true;
     computerTurn(playerPoints);
   }
@@ -104,4 +116,21 @@ btnStop.addEventListener('click', () => {
   btnGet.disabled = true;
   btnStop.disabled = true;
   computerTurn(playerPoints);
+});
+
+btnNew.addEventListener('click', () => {
+  deck = [];
+  deck = createDeck();
+
+  playerPoints = 0;
+  computerPoints = 0;
+  
+  smallPoints[0].innerText = 0;
+  smallPoints[1].innerText = 0;
+
+  divPlayerCards.innerHTML = '';
+  divComputerCards.innerHTML = '';
+
+  btnGet.disabled = false;
+  btnStop.disabled = false;
 });
