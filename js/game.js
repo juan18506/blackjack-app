@@ -6,7 +6,7 @@
 */
 
 const blackjackModule = (() => {
-  'use strict'
+  'use strict';
 
   let deck = [];
   const types = ['C', 'D', 'H', 'S'];
