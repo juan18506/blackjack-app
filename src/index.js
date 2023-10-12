@@ -1,3 +1,7 @@
+import { shuffle } from 'underscore';
+
+import './css/styles.css';
+
 /*
   2C -> Two of Clubs
   2D -> Two of Diamonds
@@ -51,7 +55,7 @@ const blackjackModule = (() => {
       }
     }
   
-    return _.shuffle(deck);
+    return shuffle(deck);
   }
   
   // Retrieves a card from the deck.
@@ -87,7 +91,7 @@ const blackjackModule = (() => {
   // Create and display a playing card image on the screen.
   const displayCardImage = (card, turn) => {
     const imgCard = document.createElement('img');
-    imgCard.src = `assets/${card}.png`;
+    imgCard.src = `/cards/${card}.png`;
     imgCard.classList.add('blackjack-card');
     divCardsPlayers[turn].append(imgCard);
   }
