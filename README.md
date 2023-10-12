@@ -15,3 +15,26 @@ It's an app that allows you to play the game of Blackjack. This application was 
 ## Author
 
 **Juan Alves Pedreira**
+
+## Installation and usage
+
+### Runing the project
+
+Clone this repository:
+
+```
+git clone https://github.com/juan18506/blackjack-app.git
+cd blackjack-app
+```
+
+Install packages :
+
+```
+npm install
+```
+
+When installation is complete, run :
+
+```
+npm run dev
+```
