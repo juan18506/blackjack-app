@@ -79,7 +79,7 @@ const blackjackModule = (() => {
 
   // Turn: 0 = first player, playersPoints.length - 1 = computer
   const accumulatePoints = (card, turn) => {
-    playersPoints[turn] += playersPoints[turn] + getCardValue(card);
+    playersPoints[turn] += getCardValue(card);
     smallPoints[turn].innerText = playersPoints[turn];
     return playersPoints[turn];
   }
@@ -103,7 +103,7 @@ const blackjackModule = (() => {
       } else if (computerPoints > 21 || (minPoints <= 21 && minPoints > computerPoints)) {
         alert('Player wins')
       }
-    }, 50);
+    }, 100);
   }
   
   // Run computer turn

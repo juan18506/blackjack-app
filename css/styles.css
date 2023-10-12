@@ -16,8 +16,20 @@ html, body {
   position: relative;
   left: 6.25rem;
   margin-left: -4.6875rem;
+  animation: fadeIn 150ms ease;
 }
 
 .divCards {
   height: 15rem;
+}
+
+@keyframes fadeIn {
+  from {
+    transform: translateX(+50%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0%);
+    opacity: 1;
+  }
 }
