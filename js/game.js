@@ -5,26 +5,42 @@
   2S -> Two of Spades
 */
 
-(() => {
+const blackjackModule = (() => {
   'use strict'
 
   let deck = [];
   const types = ['C', 'D', 'H', 'S'];
-  const specials = ['A', 'J', 'Q', 'K'];
-  
-  let playerPoints = 0;
-  let computerPoints = 0;
+  const specials = ['A', 'J', 'Q', 'K']; 
+  let playersPoints = [];
   
   // HTML References
   const btnGet = document.getElementById('btnGet');
   const btnStop = document.getElementById('btnStop');
   const btnNew = document.getElementById('btnNew');
+
+  const divCardsPlayers = document.querySelectorAll('.divCards');
   const smallPoints = document.querySelectorAll('small');
-  const divPlayerCards = document.getElementById('player-cards');
-  const divComputerCards = document.getElementById('computer-cards');
+
+  // Initializes a new game of blackjack with the specified number of players.
+  const startNewBlackjackGame = (playersNumber = 1) => {
+    deck = createDeck();
+
+    playersPoints = [];
+    for (let i = 0; i <= playersNumber; i++) {
+      playersPoints.push(0);
+    }
+
+    smallPoints.forEach((element) => element.innerText = 0);
+    divCardsPlayers.forEach((element) => element.innerHTML = '');
+    
+    btnGet.disabled = false;
+    btnStop.disabled = false;
+  }
 
   // Create and shuffle a deck of cards.
   const createDeck = () => {  
+    deck = [];
+
     for (const type of types) {
       for (let i = 2; i <= 10; i++) {
         deck.push(i + type);
@@ -35,20 +51,16 @@
       }
     }
   
-    deck = _.shuffle(deck);
-    return deck;
+    return _.shuffle(deck);
   }
   
-  createDeck();
-
   // Retrieves a card from the deck.
   const getCard = () => {
     if (deck.length === 0) {
       throw new Error('There are no cards in the deck')
     }
   
-    const card = deck.pop();
-    return card;
+    return deck.pop();
   }
   
   // Calculate the numerical value of a card in a deck.
@@ -64,25 +76,25 @@
   
     return points;
   }
-  
-  // Computer turn
-  const computerTurn = (minPoints) => {
-    do {
-      const card = getCard();
-      computerPoints += getCardValue(card);
-      smallPoints[1].innerText = computerPoints;
-    
-      const imgCard = document.createElement('img');
-      imgCard.src = `assets/${card}.png`;
-      imgCard.classList.add('blackjack-card');
-      divComputerCards.append(imgCard);
-  
-      if (minPoints > 21) {
-        break;
-      }
-      
-    } while (computerPoints < minPoints);
-  
+
+  // Turn: 0 = first player, playersPoints.length - 1 = computer
+  const accumulatePoints = (card, turn) => {
+    playersPoints[turn] += playersPoints[turn] + getCardValue(card);
+    smallPoints[turn].innerText = playersPoints[turn];
+    return playersPoints[turn];
+  }
+
+  // Create and display a playing card image on the screen.
+  const displayCardImage = (card, turn) => {
+    const imgCard = document.createElement('img');
+    imgCard.src = `assets/${card}.png`;
+    imgCard.classList.add('blackjack-card');
+    divCardsPlayers[turn].append(imgCard);
+  }
+
+  const determineWinner = () => {
+    const [minPoints, computerPoints] = playersPoints;
+
     setTimeout(() => {
       if (computerPoints === minPoints) {
         alert('no one wins');
@@ -94,15 +106,23 @@
     }, 50);
   }
   
+  // Run computer turn
+  const computerTurn = (minPoints) => {
+    let computerPoints = 0;
+
+    do {
+      const card = getCard();
+      computerPoints = accumulatePoints(card, playersPoints.length - 1);
+      displayCardImage(card, playersPoints.length - 1);
+    } while (computerPoints < minPoints && minPoints <= 21);
+
+    determineWinner();
+  }
+  
   btnGet.addEventListener('click', () => {
     const card = getCard();
-    playerPoints += getCardValue(card);
-    smallPoints[0].innerText = playerPoints;
-  
-    const imgCard = document.createElement('img');
-    imgCard.src = `assets/${card}.png`;
-    imgCard.classList.add('blackjack-card');
-    divPlayerCards.append(imgCard);
+    const playerPoints = accumulatePoints(card, 0);
+    displayCardImage(card, 0);
   
     if (playerPoints > 21) {
       btnGet.disabled = true;
@@ -118,23 +138,14 @@
   btnStop.addEventListener('click', () => {
     btnGet.disabled = true;
     btnStop.disabled = true;
-    computerTurn(playerPoints);
+    computerTurn(playersPoints[0]);
   });
   
   btnNew.addEventListener('click', () => {
-    deck = [];
-    deck = createDeck();
-  
-    playerPoints = 0;
-    computerPoints = 0;
-    
-    smallPoints[0].innerText = 0;
-    smallPoints[1].innerText = 0;
-  
-    divPlayerCards.innerHTML = '';
-    divComputerCards.innerHTML = '';
-  
-    btnGet.disabled = false;
-    btnStop.disabled = false;
+    startNewBlackjackGame();
   });
+
+  return {
+    startNewBlackjackGame,
+  };
 })();

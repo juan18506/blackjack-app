@@ -18,6 +18,6 @@ html, body {
   margin-left: -4.6875rem;
 }
 
-#player-cards, #computer-cards {
+.divCards {
   height: 15rem;
 }
